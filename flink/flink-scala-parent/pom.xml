@@ -36,11 +36,13 @@
   <properties>
     <!--library versions-->
     <interpreter.name>flink</interpreter.name>
-    <flink.version>${flink1.10.version}</flink.version>
+    <flink.version>${flink1.12.version}</flink.version>
     <flink.hadoop.version>2.6.5</flink.hadoop.version>
     <hive.version>2.3.4</hive.version>
     <hiverunner.version>4.0.0</hiverunner.version>
     <grpc.version>1.15.0</grpc.version>
+    <!-- Start from 1.15 flink is scala free (no scala version in its artifact) -->
+    <flink.library.scala.suffix>_${flink.scala.binary.version}</flink.library.scala.suffix>
 
     <flink.bin.download.url>https://archive.apache.org/dist/flink/flink-${flink.version}/flink-${flink.version}-bin-scala_${flink.scala.binary.version}.tgz</flink.bin.download.url>
   </properties>
@@ -51,18 +53,6 @@
     <dependency>
       <groupId>org.apache.zeppelin</groupId>
       <artifactId>flink-shims</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.zeppelin</groupId>
-      <artifactId>flink1.10-shims</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.zeppelin</groupId>
-      <artifactId>flink1.11-shims</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -81,6 +71,12 @@
     <dependency>
       <groupId>org.apache.zeppelin</groupId>
       <artifactId>flink1.14-shims</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.zeppelin</groupId>
+      <artifactId>flink1.15-shims</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -159,14 +155,14 @@
 
     <dependency>
       <groupId>org.apache.flink</groupId>
-      <artifactId>flink-clients_${flink.scala.binary.version}</artifactId>
+      <artifactId>flink-clients${flink.library.scala.suffix}</artifactId>
       <version>${flink.version}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.flink</groupId>
-      <artifactId>flink-yarn_${flink.scala.binary.version}</artifactId>
+      <artifactId>flink-yarn${flink.library.scala.suffix}</artifactId>
       <version>${flink.version}</version>
       <scope>provided</scope>
       <exclusions>
@@ -205,7 +201,7 @@
 
     <dependency>
       <groupId>org.apache.flink</groupId>
-      <artifactId>flink-table-api-java-bridge_${flink.scala.binary.version}</artifactId>
+      <artifactId>flink-table-api-java-bridge${flink.library.scala.suffix}</artifactId>
       <version>${flink.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -219,7 +215,7 @@
 
     <dependency>
       <groupId>org.apache.flink</groupId>
-      <artifactId>flink-streaming-java_${flink.scala.binary.version}</artifactId>
+      <artifactId>flink-streaming-java${flink.library.scala.suffix}</artifactId>
       <version>${flink.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -572,7 +568,7 @@
     <dependency>
       <groupId>net.jodah</groupId>
       <artifactId>concurrentunit</artifactId>
-      <version>0.4.4</version>
+      <version>0.4.6</version>
       <scope>test</scope>
     </dependency>
 
@@ -803,7 +799,7 @@
           <!-- set sun.zip.disableMemoryMapping=true because of
           https://blogs.oracle.com/poonam/crashes-in-zipgetentry
           https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8191484 -->
-          <argLine>-Xmx5120m -XX:MaxMetaspaceSize=512m -Dsun.zip.disableMemoryMapping=true</argLine>
+          <argLine>-Xmx5120m -XX:MaxMetaspaceSize=1024m -Dsun.zip.disableMemoryMapping=true</argLine>
 <!--          <argLine>-Xmx4096m -XX:MaxMetaspaceSize=512m -Dsun.zip.disableMemoryMapping=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=6006</argLine>-->
 
           <environmentVariables>
@@ -931,84 +927,6 @@
   <profiles>
 
     <profile>
-      <id>flink-110</id>
-      <properties>
-        <flink.version>${flink1.10.version}</flink.version>
-      </properties>
-      <dependencies>
-        <dependency>
-          <groupId>org.apache.flink</groupId>
-          <artifactId>flink-runtime_${flink.scala.binary.version}</artifactId>
-          <version>${flink.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.flink</groupId>
-          <artifactId>flink-table-runtime-blink_${flink.scala.binary.version}</artifactId>
-          <version>${flink.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.flink</groupId>
-          <artifactId>flink-table-planner_${flink.scala.binary.version}</artifactId>
-          <version>${flink.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.flink</groupId>
-          <artifactId>flink-table-planner-blink_${flink.scala.binary.version}</artifactId>
-          <version>${flink.version}</version>
-          <scope>provided</scope>
-          <exclusions>
-            <exclusion>
-              <groupId>org.reflections</groupId>
-              <artifactId>reflections</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>flink-111</id>
-      <properties>
-        <flink.version>${flink1.11.version}</flink.version>
-      </properties>
-      <dependencies>
-        <dependency>
-          <groupId>org.apache.flink</groupId>
-          <artifactId>flink-runtime_${flink.scala.binary.version}</artifactId>
-          <version>${flink.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.flink</groupId>
-          <artifactId>flink-table-runtime-blink_${flink.scala.binary.version}</artifactId>
-          <version>${flink.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.flink</groupId>
-          <artifactId>flink-table-planner_${flink.scala.binary.version}</artifactId>
-          <version>${flink.version}</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.flink</groupId>
-          <artifactId>flink-table-planner-blink_${flink.scala.binary.version}</artifactId>
-          <version>${flink.version}</version>
-          <scope>provided</scope>
-          <exclusions>
-            <exclusion>
-              <groupId>org.reflections</groupId>
-              <artifactId>reflections</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
       <id>flink-112</id>
       <properties>
         <flink.version>${flink1.12.version}</flink.version>
@@ -1090,6 +1008,30 @@
       <id>flink-114</id>
       <properties>
         <flink.version>${flink1.14.version}</flink.version>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.flink</groupId>
+          <artifactId>flink-runtime</artifactId>
+          <version>${flink.version}</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.flink</groupId>
+          <artifactId>flink-table-planner_${flink.scala.binary.version}</artifactId>
+          <version>${flink.version}</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>flink-115</id>
+      <properties>
+        <flink.version>${flink1.15.version}</flink.version>
+        <flink.scala.version>2.12.7</flink.scala.version>
+        <flink.scala.binary.version>2.12</flink.scala.binary.version>
+        <flink.library.scala.suffix></flink.library.scala.suffix>
       </properties>
       <dependencies>
         <dependency>

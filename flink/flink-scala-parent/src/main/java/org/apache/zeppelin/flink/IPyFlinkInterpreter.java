@@ -137,10 +137,6 @@ public class IPyFlinkInterpreter extends IPythonInterpreter {
     return flinkInterpreter.getProgress(context);
   }
 
-  public boolean isFlink110() {
-    return flinkInterpreter.getFlinkVersion().isFlink110();
-  }
-
   public org.apache.flink.api.java.ExecutionEnvironment getJavaExecutionEnvironment() {
     return flinkInterpreter.getExecutionEnvironment().getJavaEnv();
   }
@@ -154,7 +150,7 @@ public class IPyFlinkInterpreter extends IPythonInterpreter {
     return flinkInterpreter.getJavaBatchTableEnvironment(planner);
   }
 
-  public TableEnvironment getJavaStreamTableEnvironment(String planner) {
-    return flinkInterpreter.getJavaStreamTableEnvironment(planner);
+  public TableEnvironment getJavaStreamTableEnvironment() {
+    return flinkInterpreter.getJavaStreamTableEnvironment();
   }
 }
